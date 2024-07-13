@@ -1,0 +1,17 @@
+{
+    "C_Cpp.default.compilerPath": "C:/MinGW/bin/gcc.exe",
+    "C_Cpp.errorSquiggles": "enabled",
+    "files.associations": {
+        "aula0101.h": "c",
+        "cores.h": "c",
+        "string.h": "c",
+        "stdio.h": "c",
+        "stdlib.h": "c",
+        "aula0201.h": "c",
+        "aula0301.h": "c",
+        "limits.h": "c",
+        "errno.h": "c",
+        "float.h": "c"
+    },
+    "editor.tabSize": 2
+}
