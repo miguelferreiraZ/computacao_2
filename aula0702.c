@@ -58,6 +58,12 @@ main(int argc, char *argv[])
   tipoPixel monitor[NUMERO_MAXIMO_LINHAS_MONITOR][NUMERO_MAXIMO_COLUNAS_MONITOR];
   tipoErros resultado, resultadoDistribuicaoInicial;
 
+  if (argv[1][0] == '-')
+  {
+    printf ("\n%s%sBase invalida no argumento (%hu)%s\n\n", RED, WHITE_BACKGROUND, 1, RESET);
+    exit(BASE_INVALIDA);
+  }
+
   for (index = 1; index < NUMERO_ARGUMENTOS; index++)
   {
     errno = 0;
@@ -112,19 +118,19 @@ main(int argc, char *argv[])
     else
     {
       if (index == 6){
-        corFundo = ObterCodigoAnsiCor(argv[6], fundo);
+        corFundo = argv[6];
       }
       
       if (index == 7){
-        corApagado = ObterCodigoAnsiCor(argv[7], texto);
+        corApagado = argv[7];
       }
 
       if (index == 8){
-        corAceso = ObterCodigoAnsiCor(argv[8], texto);
+        corAceso = argv[8];
       }
 
       if (index == 9){
-        corDefeituoso = ObterCodigoAnsiCor(argv[9], texto);  
+        corDefeituoso = argv[9];
       }
     }
   }

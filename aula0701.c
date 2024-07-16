@@ -6,7 +6,7 @@
  * Prof. Marcelo Luiz Drumond Lanza
  * EEL270 - Computacao II - Turma 2024/1
  * Autor: Miguel de Azevedo Ferreira
- * Descricao: Funcao para ObterCodigoAnsiCor
+ * Descricao: Funcao para ObterCodigoAnsiCor, Gerar pixels e mostrar monitor.
  *
  * $Author$
  * $Date$
@@ -28,35 +28,100 @@
 #include "cores.h"
 
 char *
-ObterCodigoAnsiCor(char * nomeCor, tipoFundoTexto fundoTexto)
+ObterCodigoAnsiCor(char *nomeCor, tipoFundoTexto fundoTexto)
 {
   if (nomeCor == NULL)
   {
-    return fundoTexto == fundo ? BLACK_BACKGROUND : WHITE;
+    if (fundoTexto == fundo)
+    {
+      return BLACK_BACKGROUND;
+    }
+    else
+    {
+      return WHITE;
+    }
   }
 
-  if (fundoTexto == fundo) {
-    return strcmp(nomeCor, "preto") == 0 ? BLACK_BACKGROUND :
-           strcmp(nomeCor, "vermelho") == 0 ? RED_BACKGROUND :
-           strcmp(nomeCor, "verde") == 0 ? GREEN_BACKGROUND :
-           strcmp(nomeCor, "amarelo") == 0 ? YELLOW_BACKGROUND :
-           strcmp(nomeCor, "azul") == 0 ? BLUE_BACKGROUND :
-           strcmp(nomeCor, "magenta") == 0 ? MAGENTA_BACKGROUND :
-           strcmp(nomeCor, "ciano") == 0 ? CYAN_BACKGROUND :
-           strcmp(nomeCor, "branco") == 0 ? WHITE_BACKGROUND :
-           BLACK_BACKGROUND; 
-  } else {
-    return strcmp(nomeCor, "preto") == 0 ? BLACK :
-           strcmp(nomeCor, "vermelho") == 0 ? RED :
-           strcmp(nomeCor, "verde") == 0 ? GREEN :
-           strcmp(nomeCor, "amarelo") == 0 ? YELLOW :
-           strcmp(nomeCor, "azul") == 0 ? BLUE :
-           strcmp(nomeCor, "magenta") == 0 ? MAGENTA :
-           strcmp(nomeCor, "ciano") == 0 ? CYAN :
-           strcmp(nomeCor, "branco") == 0 ? WHITE :
-           WHITE;
+  if (fundoTexto == fundo)
+  {
+    if (strcmp(nomeCor, "preto") == 0)
+    {
+      return BLACK_BACKGROUND;
+    }
+    else if (strcmp(nomeCor, "vermelho") == 0)
+    {
+      return RED_BACKGROUND;
+    }
+    else if (strcmp(nomeCor, "verde") == 0)
+    {
+      return GREEN_BACKGROUND;
+    }
+    else if (strcmp(nomeCor, "amarelo") == 0)
+    {
+      return YELLOW_BACKGROUND;
+    }
+    else if (strcmp(nomeCor, "azul") == 0)
+    {
+      return BLUE_BACKGROUND;
+    }
+    else if (strcmp(nomeCor, "magenta") == 0)
+    {
+      return MAGENTA_BACKGROUND;
+    }
+    else if (strcmp(nomeCor, "ciano") == 0)
+    {
+      return CYAN_BACKGROUND;
+    }
+    else if (strcmp(nomeCor, "branco") == 0)
+    {
+      return WHITE_BACKGROUND;
+    }
+    else
+    {
+      return BLACK_BACKGROUND;
+    }
+  }
+  else
+  {
+    if (strcmp(nomeCor, "preto") == 0)
+    {
+      return BLACK;
+    }
+    else if (strcmp(nomeCor, "vermelho") == 0)
+    {
+      return RED;
+    }
+    else if (strcmp(nomeCor, "verde") == 0)
+    {
+      return GREEN;
+    }
+    else if (strcmp(nomeCor, "amarelo") == 0)
+    {
+      return YELLOW;
+    }
+    else if (strcmp(nomeCor, "azul") == 0)
+    {
+      return BLUE;
+    }
+    else if (strcmp(nomeCor, "magenta") == 0)
+    {
+      return MAGENTA;
+    }
+    else if (strcmp(nomeCor, "ciano") == 0)
+    {
+      return CYAN;
+    }
+    else if (strcmp(nomeCor, "branco") == 0)
+    {
+      return WHITE;
+    }
+    else
+    {
+      return WHITE;
+    }
   }
 }
+
 
 tipoErros
 MostrarMonitor(useconds_t tempoEspera, tipoPixel monitor[NUMERO_MAXIMO_LINHAS_MONITOR][NUMERO_MAXIMO_COLUNAS_MONITOR], unsigned numeroLinhas, unsigned numeroColunas, char *corFundo, char *corPixelApagado, char *corPixelAceso, char *corPixelDefeituoso)
@@ -75,6 +140,11 @@ MostrarMonitor(useconds_t tempoEspera, tipoPixel monitor[NUMERO_MAXIMO_LINHAS_MO
     return erroNumeroColunas;
   }
 
+  if (tempoEspera < 0)
+  {
+    return erroTempoCongelamento;
+  }
+
   system("clear");
   printf("\n");
 
@@ -88,25 +158,27 @@ MostrarMonitor(useconds_t tempoEspera, tipoPixel monitor[NUMERO_MAXIMO_LINHAS_MO
   for (linha = 0; linha < numeroLinhas; linha++)
   {
     printf("| ");
+    printf("%s", ObterCodigoAnsiCor(corFundo, fundo)); /* COR FUNDO */
     for (coluna = 0; coluna < numeroColunas; coluna++)
     {
       if (monitor[linha][coluna] == apagado)
       {
-        printf("%s%c%s", corPixelApagado, APAGADO, RESET);
+        printf("%s%c", ObterCodigoAnsiCor(corPixelApagado, fundo), APAGADO);
       }
       else if (monitor[linha][coluna] == aceso)
       {
-        printf("%s%c%s", corPixelAceso, ACESO, RESET);
+        printf("%s%c", ObterCodigoAnsiCor(corPixelAceso, fundo), ACESO);
       }
       else if (monitor[linha][coluna] == defeituoso)
       {
-        printf("%s%c%s", corPixelDefeituoso, DEFEITUOSO, RESET);
+        printf("%s%s%c", ObterCodigoAnsiCor(corPixelDefeituoso, texto), ObterCodigoAnsiCor(corFundo, fundo), DEFEITUOSO);
       }
       else
       {
         return erroNumeroVertices;
       }
     }
+    printf("%s", RESET); /* RESETA COR FUNDO */
     printf(" |\n");
   }
 
@@ -138,7 +210,7 @@ GerarDistribuicaoInicial(tipoPixel monitor[NUMERO_MAXIMO_LINHAS_MONITOR][NUMERO_
     return erroNumeroColunas;
   }
   
-  unsigned linha, coluna, indice;
+  unsigned linha, coluna;
   unsigned short numeroDefeituosos = (unsigned short)(numeroLinhas * numeroColunas * (percentualDefeituosos / 100));
   unsigned short numeroApagados = (unsigned short)(numeroLinhas * numeroColunas * (percentualApagados / 100));
   srand(time(NULL));
@@ -149,9 +221,9 @@ GerarDistribuicaoInicial(tipoPixel monitor[NUMERO_MAXIMO_LINHAS_MONITOR][NUMERO_
   }
   
   /* Inicializando o monitor com pixels acesos */
-  for (linha = 1; linha < numeroLinhas + 1; linha++)
+  for (linha = 1; linha < numeroLinhas; linha++)
   {
-    for (coluna = 1; coluna < numeroColunas + 1; coluna++)
+    for (coluna = 1; coluna < numeroColunas; coluna++)
     {
       monitor[linha][coluna] = aceso;
     }
@@ -160,8 +232,8 @@ GerarDistribuicaoInicial(tipoPixel monitor[NUMERO_MAXIMO_LINHAS_MONITOR][NUMERO_
   /* Colocando pixels defeituosos aleatorios */
   while (numeroDefeituosos > 0)
   {
-    unsigned linhaAleatoria = (rand() % numeroLinhas) + 1; /* de 1 ate numeroLinhas */
-    unsigned colunaAleatoria = (rand() % numeroColunas) + 1;
+    unsigned linhaAleatoria = (rand() % numeroLinhas); /* de 1 ate numeroLinhas */
+    unsigned colunaAleatoria = (rand() % numeroColunas);
 
     if (monitor[linhaAleatoria][colunaAleatoria] != defeituoso)
     {
@@ -173,8 +245,8 @@ GerarDistribuicaoInicial(tipoPixel monitor[NUMERO_MAXIMO_LINHAS_MONITOR][NUMERO_
   /* Colocando pixels apagados aleatorios */
   while (numeroApagados > 0)
   {
-    unsigned linhaAleatoria = (rand() % numeroLinhas) + 1; /* de 1 ate numeroLinhas */
-    unsigned colunaAleatoria = (rand() % numeroColunas) + 1;
+    unsigned linhaAleatoria = (rand() % numeroLinhas); /* de 1 ate numeroLinhas */
+    unsigned colunaAleatoria = (rand() % numeroColunas);
 
     if (monitor[linhaAleatoria][colunaAleatoria] != defeituoso && monitor[linhaAleatoria][colunaAleatoria] != apagado)
     {
