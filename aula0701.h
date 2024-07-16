@@ -19,7 +19,7 @@
 
 typedef enum {fundo, texto} tipoFundoTexto;
 typedef enum {apagado, aceso, defeituoso = -1} tipoPixel;
-typedef enum {ok, erroNumeroLinhas, erroNumeroColunas, erroNumeroVertices} tipoErros;
+typedef enum {ok, erroNumeroLinhas, erroNumeroColunas, erroNumeroVertices, erroNumeroPercentual, erroDigitoInvalido} tipoErros;
 
 #define NUMERO_MAXIMO_LINHAS_MONITOR                                        250
 #define NUMERO_MAXIMO_COLUNAS_MONITOR                                       800
@@ -34,7 +34,7 @@ char *
 ObterCodigoAnsiCor(char * nomeCor, /* E */
                   tipoFundoTexto fundoTexto);
 
-tipoErros.
+tipoErros
 MostrarMonitor(useconds_t tempoEspera,
                tipoPixel monitor[NUMERO_MAXIMO_LINHAS_MONITOR][NUMERO_MAXIMO_COLUNAS_MONITOR],
                unsigned numeroLinhas,
@@ -43,6 +43,13 @@ MostrarMonitor(useconds_t tempoEspera,
                char *corPixelApagado,
                char *corPixelAceso,
                char *corPixelDefeituoso);
+
+tipoErros
+GerarDistribuicaoInicial(tipoPixel monitor[NUMERO_MAXIMO_LINHAS_MONITOR][NUMERO_MAXIMO_COLUNAS_MONITOR], /* E/S */
+                        unsigned numeroLinhas, 
+                        unsigned numeroColunas, 
+                        float percentualDefeituosos, 
+                        float percentualApagados);
 
 
 #endif
