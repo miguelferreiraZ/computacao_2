@@ -19,7 +19,7 @@
 
 typedef enum {fundo, texto} tipoFundoTexto;
 typedef enum {apagado, aceso, defeituoso = -1} tipoPixel;
-typedef enum {ok, erroNumeroLinhas, erroNumeroColunas, erroNumeroVertices, erroNumeroPercentual, erroDigitoInvalido} tipoErros;
+typedef enum {ok, erroNumeroLinhas, erroNumeroColunas, erroNumeroVertices, erroNumeroPercentual, erroDigitoInvalido, erroDesconhecido} tipoErros;
 
 #define NUMERO_MAXIMO_LINHAS_MONITOR                                        250
 #define NUMERO_MAXIMO_COLUNAS_MONITOR                                       800

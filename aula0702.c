@@ -51,12 +51,12 @@ main(int argc, char *argv[])
     exit(NUMERO_ARGUMENTOS_INVALIDO);
   }
 
-  char *verificacao;
+  char *verificacao, *corFundo, *corApagado, *corAceso, *corDefeituoso;
   unsigned tempoCongelamento, qtdLinhas, qtdColunas, argumentoInt;
   unsigned short index;
   float percentDefeituosos, percentApagados, argumentoFloat;
   tipoPixel monitor[NUMERO_MAXIMO_LINHAS_MONITOR][NUMERO_MAXIMO_COLUNAS_MONITOR];
-  tipoErros resultado;
+  tipoErros resultado, resultadoDistribuicaoInicial;
 
   for (index = 1; index < NUMERO_ARGUMENTOS; index++)
   {
@@ -109,7 +109,44 @@ main(int argc, char *argv[])
         percentApagados = argumentoFloat;
       }
     }
+    else
+    {
+      if (index == 6){
+        corFundo = ObterCodigoAnsiCor(argv[6], fundo);
+      }
+      
+      if (index == 7){
+        corApagado = ObterCodigoAnsiCor(argv[7], texto);
+      }
 
-    /* verificacao do char? */
+      if (index == 8){
+        corAceso = ObterCodigoAnsiCor(argv[8], texto);
+      }
+
+      if (index == 9){
+        corDefeituoso = ObterCodigoAnsiCor(argv[9], texto);  
+      }
+    }
   }
+
+  resultadoDistribuicaoInicial = GerarDistribuicaoInicial(monitor, qtdLinhas, qtdColunas, percentDefeituosos, percentApagados);
+  
+  if (resultadoDistribuicaoInicial != ok)
+  {
+    printf("%s%sErro ao gerar distribuicao inicial de pixels do monitor:%s\n", RED, WHITE_BACKGROUND, RESET);
+    printf("%s%scod.%d%s\n", RED, WHITE_BACKGROUND, resultadoDistribuicaoInicial, RESET);
+    return resultadoDistribuicaoInicial;
+  }
+
+  resultado = MostrarMonitor(tempoCongelamento, monitor, qtdLinhas, qtdColunas, corFundo, corApagado, corAceso, corDefeituoso);
+
+  if (resultado != ok)
+  {
+    printf("%s%sErro ao mostrar monitor:%s\n", RED, WHITE_BACKGROUND, RESET);
+    printf("%s%scod.%d%s\n", RED, WHITE_BACKGROUND, resultado, RESET);
+    return resultado;
+  }
+
+  return SUCESSO;
+  
 }
