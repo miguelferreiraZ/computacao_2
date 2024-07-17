@@ -221,9 +221,9 @@ GerarDistribuicaoInicial(tipoPixel monitor[NUMERO_MAXIMO_LINHAS_MONITOR][NUMERO_
   }
   
   /* Inicializando o monitor com pixels acesos */
-  for (linha = 1; linha < numeroLinhas; linha++)
+  for (linha = 0; linha < numeroLinhas; linha++)
   {
-    for (coluna = 1; coluna < numeroColunas; coluna++)
+    for (coluna = 0; coluna < numeroColunas; coluna++)
     {
       monitor[linha][coluna] = aceso;
     }
@@ -257,6 +257,35 @@ GerarDistribuicaoInicial(tipoPixel monitor[NUMERO_MAXIMO_LINHAS_MONITOR][NUMERO_
   
   return ok;
   
+}
+
+tipoErros
+LimparMonitor (tipoPixel monitor [NUMERO_MAXIMO_LINHAS_MONITOR][NUMERO_MAXIMO_COLUNAS_MONITOR], unsigned numeroLinhas, unsigned numeroColunas, char *corFundo, char *corPixelApagado, char *corPixelAceso, char *corPixelDefeituoso)
+{
+  if (numeroLinhas > NUMERO_MAXIMO_LINHAS_MONITOR || numeroLinhas <= 0)
+  {
+    return erroNumeroLinhas;
+  }
+
+  if (numeroColunas > NUMERO_MAXIMO_COLUNAS_MONITOR || numeroColunas <= 0)
+  {
+    return erroNumeroColunas;
+  }
+
+  unsigned linha, coluna;
+
+  for (linha = 0; linha < numeroLinhas; linha++)
+  {
+    for (coluna = 0; coluna < numeroColunas; coluna++)
+    {
+      if (monitor[linha][coluna] == aceso)
+      {
+        monitor[linha][coluna] = apagado;
+      }
+    }
+  }
+
+  return ok;
 }
 
 /* $RCSfile$ */

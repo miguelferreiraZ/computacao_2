@@ -52,6 +52,16 @@ GerarDistribuicaoInicial(tipoPixel monitor[NUMERO_MAXIMO_LINHAS_MONITOR][NUMERO_
                         float percentualApagados);
 
 
+tipoErros
+LimparMonitor (tipoPixel monitor [NUMERO_MAXIMO_LINHAS_MONITOR][NUMERO_MAXIMO_COLUNAS_MONITOR], /* E/S */
+              unsigned numeroLinhas, /* E */
+              unsigned numeroColunas, /* E */
+              char *corFundo, /* E */
+              char *corPixelApagado, /* E */
+              char *corPixelAceso, /* E */
+              char *corPixelDefeituoso); /* E */
+
+
 #endif
 
 /* $RCSfile$ */
