@@ -6,7 +6,7 @@
  * Prof. Marcelo Luiz Drumond Lanza
  * EEL270 - Computacao II - Turma 2024/1
  * Autor: Miguel de Azevedo Ferreira
- * Descricao: Programa de testes para a função LimparMonitor
+ * Descricao: Programa de testes para a função DesenharReta
  * 
  *
  * $Author$
@@ -38,8 +38,9 @@
 #define ERRO_EXIBICAO                                                         7
 #define ERRO_GERAR_MONITOR                                                    8
 #define ERRO_LIMPAR_MONITOR                                                   9
+#define ERRO_DESENHAR_RETA                                                   10
 
-#define NUMERO_ARGUMENTOS                                                    10
+#define NUMERO_ARGUMENTOS                                                    14
 #define EOS                                                                '\0'
 
 int
@@ -48,16 +49,17 @@ main(int argc, char *argv[])
   if (argc != NUMERO_ARGUMENTOS)
   {
     printf("%s%sErro: Numero de argumentos invalido.%s\n", RED, WHITE_BACKGROUND, RESET);
-    printf("%s%sUso: %s <tempo-congelamento> <numero-linhas> <numero-colunas> <percentual-defeituosos> <percentual-apagados> <cor-fundo> <cor-apagado> <cor-aceso> <cor-defeituoso>%s\n", RED, WHITE_BACKGROUND, argv[0], RESET);
+    printf("%s%sUso: %s <tempo-congelamento> <numero-linhas> <numero-colunas> <percentual-defeituosos> <percentual-apagados> <linha-ponto1> <coluna-ponto-1> <linha-ponto-2> <coluna-ponto-2> <cor-fundo> <cor-apagado> <cor-aceso> <cor-defeituoso>%s\n", RED, WHITE_BACKGROUND, argv[0], RESET);
     exit(NUMERO_ARGUMENTOS_INVALIDO);
   }
 
   char *verificacao, *corFundo, *corApagado, *corAceso, *corDefeituoso;
-  unsigned tempoCongelamento, qtdLinhas, qtdColunas, argumentoInt;
+  int argumentoInt, linhaA, colunaA, linhaB, colunaB;
+  unsigned tempoCongelamento, qtdLinhas, qtdColunas;
   unsigned short index;
   float percentDefeituosos, percentApagados, argumentoFloat;
   tipoPixel monitor[NUMERO_MAXIMO_LINHAS_MONITOR][NUMERO_MAXIMO_COLUNAS_MONITOR];
-  tipoErros resultado, resultadoDistribuicaoInicial, resultadoLimpar;
+  tipoErros resultado, resultadoDistribuicaoInicial, resultadoLimpar, resultadoDesenharReta;
 
   if (argv[1][0] == '-')
   {
@@ -69,19 +71,19 @@ main(int argc, char *argv[])
   {
     errno = 0;
 
-    if (index < 4)
+    if ((index < 4) || (index > 5 && index < 10))
     {
-      argumentoInt = strtoul(argv[index], &verificacao, 10);
+      argumentoInt = strtol(argv[index], &verificacao, 10);
 
       if (errno == EINVAL || *verificacao != EOS)
       {
         printf ("\n%s%sBase invalida no argumento (%hu)%s\n\n", RED, WHITE_BACKGROUND, index + 1, RESET);
-        exit (BASE_INVALIDA);
+        exit(BASE_INVALIDA);
       }
       if (errno == ERANGE)
       {	
         printf ("%s%s\nValor fornecido ultrapassa o valor maximo permitido para int (%i) no argumento (%hu)%s\n\n", RED, WHITE_BACKGROUND, INT_MAX, index + 1, RESET);
-        exit (VALOR_MAXIMO_INT_EXCEDIDO);
+        exit(VALOR_MAXIMO_INT_EXCEDIDO);
       }
       
       if (index == 1)
@@ -90,6 +92,14 @@ main(int argc, char *argv[])
 				qtdLinhas = argumentoInt;
 			else if (index == 3)
 				qtdColunas = argumentoInt;
+      else if (index == 6)
+				linhaA = argumentoInt;
+			else if (index == 7)
+				colunaA = argumentoInt;
+			else if (index == 8)
+				linhaB = argumentoInt;
+			else if (index == 9)
+				colunaB = argumentoInt;
 
     } 
     else if (index < 6)
@@ -99,12 +109,12 @@ main(int argc, char *argv[])
       if (errno == EINVAL || *verificacao != EOS)
       {
         printf ("\n%s%sBase invalida no argumento (%hu)%s\n\n", RED, WHITE_BACKGROUND, index + 1, RESET);
-        exit (BASE_INVALIDA);
+        exit(BASE_INVALIDA);
       }
       if (errno == ERANGE)
       {	
         printf ("%s%s\nValor fornecido ultrapassa o valor maximo permitido para double (%f) no argumento (%hu)%s\n\n", RED, WHITE_BACKGROUND, DBL_MAX, index + 1, RESET);
-        exit (VALOR_MAXIMO_DOUBLE_EXCEDIDO);
+        exit(VALOR_MAXIMO_DOUBLE_EXCEDIDO);
       }
 
       if (index == 4)
@@ -118,20 +128,20 @@ main(int argc, char *argv[])
     }
     else
     {
-      if (index == 6){
-        corFundo = argv[6];
+      if (index == 10){
+        corFundo = argv[10];
       }
       
-      if (index == 7){
-        corApagado = argv[7];
+      if (index == 11){
+        corApagado = argv[11];
       }
 
-      if (index == 8){
-        corAceso = argv[8];
+      if (index == 12){
+        corAceso = argv[12];
       }
 
-      if (index == 9){
-        corDefeituoso = argv[9];
+      if (index == 13){
+        corDefeituoso = argv[13];
       }
     }
   }
@@ -163,10 +173,18 @@ main(int argc, char *argv[])
     exit(ERRO_LIMPAR_MONITOR);
   }
 
+  resultadoDesenharReta = DesenharReta(monitor, qtdLinhas, qtdColunas, linhaA, colunaA, linhaB, colunaB, corFundo, corApagado, corAceso, corDefeituoso);
+
+  if (resultadoDesenharReta != ok)
+  {
+    printf("%s%sErro ao desenhar reta de pixels:%s\n", RED, WHITE_BACKGROUND, RESET);
+    printf("%s%scod.%d%s\n", RED, WHITE_BACKGROUND, resultadoDesenharReta, RESET);
+    exit(ERRO_DESENHAR_RETA);
+  }
+
   MostrarMonitor(tempoCongelamento, monitor, qtdLinhas, qtdColunas, corFundo, corApagado, corAceso, corDefeituoso);
 
   return SUCESSO;
-
 }
 
 /* $RCSfile$ */

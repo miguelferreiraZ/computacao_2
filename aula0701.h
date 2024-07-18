@@ -19,7 +19,7 @@
 
 typedef enum {fundo, texto} tipoFundoTexto;
 typedef enum {apagado, aceso, defeituoso = -1} tipoPixel;
-typedef enum {ok, erroNumeroLinhas, erroNumeroColunas, erroNumeroVertices, erroNumeroPercentual, erroDigitoInvalido, erroTempoCongelamento, erroDesconhecido} tipoErros;
+typedef enum {ok, erroNumeroLinhas, erroNumeroColunas, erroNumeroVertices, erroNumeroPercentual, erroTempoCongelamento, linhaUltrapassaLimites, colunaUltrapassaLimites, erroPixelDefeituosoNoCaminho, erroDesconhecido} tipoErros;
 
 #define NUMERO_MAXIMO_LINHAS_MONITOR                                        250
 #define NUMERO_MAXIMO_COLUNAS_MONITOR                                       800
@@ -61,6 +61,18 @@ LimparMonitor (tipoPixel monitor [NUMERO_MAXIMO_LINHAS_MONITOR][NUMERO_MAXIMO_CO
               char *corPixelAceso, /* E */
               char *corPixelDefeituoso); /* E */
 
+tipoErros
+DesenharReta (tipoPixel monitor [NUMERO_MAXIMO_LINHAS_MONITOR ][NUMERO_MAXIMO_COLUNAS_MONITOR], /* E/S */
+              unsigned numeroLinhas, /* E */
+              unsigned numeroColunas, /* E */
+              unsigned linhaA, /* E */
+              unsigned colunaA, /* E */
+              unsigned linhaB, /* E */
+              unsigned colunaB, /* E */
+              char *corFundo, /* E */
+              char *corPixelApagado, /* E */
+              char *corPixelAceso, /* E */
+              char *corPixelDefeituoso /* E */);
 
 #endif
 

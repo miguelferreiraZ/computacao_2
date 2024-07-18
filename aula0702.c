@@ -37,6 +37,7 @@
 #define NUMERO_MAXIMO_LINHAS_EXCEDIDO                                         5
 #define NUMERO_MAXIMO_COLUNAS_EXCEDIDO                                        6
 #define ERRO_EXIBICAO                                                         7
+#define ERRO_GERAR_MONITOR                                                    8
 
 #define NUMERO_ARGUMENTOS                                                    10
 #define EOS                                                                '\0'
@@ -141,7 +142,7 @@ main(int argc, char *argv[])
   {
     printf("%s%sErro ao gerar distribuicao inicial de pixels do monitor:%s\n", RED, WHITE_BACKGROUND, RESET);
     printf("%s%scod.%d%s\n", RED, WHITE_BACKGROUND, resultadoDistribuicaoInicial, RESET);
-    return resultadoDistribuicaoInicial;
+    exit(ERRO_GERAR_MONITOR);
   }
 
   resultado = MostrarMonitor(tempoCongelamento, monitor, qtdLinhas, qtdColunas, corFundo, corApagado, corAceso, corDefeituoso);
@@ -150,7 +151,7 @@ main(int argc, char *argv[])
   {
     printf("%s%sErro ao mostrar monitor:%s\n", RED, WHITE_BACKGROUND, RESET);
     printf("%s%scod.%d%s\n", RED, WHITE_BACKGROUND, resultado, RESET);
-    return resultado;
+    exit(ERRO_EXIBICAO);
   }
 
   return SUCESSO;

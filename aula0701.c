@@ -32,93 +32,29 @@ ObterCodigoAnsiCor(char *nomeCor, tipoFundoTexto fundoTexto)
 {
   if (nomeCor == NULL)
   {
-    if (fundoTexto == fundo)
-    {
-      return BLACK_BACKGROUND;
-    }
-    else
-    {
-      return WHITE;
-    }
+    return fundoTexto == fundo ? BLACK_BACKGROUND : WHITE;
   }
 
-  if (fundoTexto == fundo)
-  {
-    if (strcmp(nomeCor, "preto") == 0)
-    {
-      return BLACK_BACKGROUND;
-    }
-    else if (strcmp(nomeCor, "vermelho") == 0)
-    {
-      return RED_BACKGROUND;
-    }
-    else if (strcmp(nomeCor, "verde") == 0)
-    {
-      return GREEN_BACKGROUND;
-    }
-    else if (strcmp(nomeCor, "amarelo") == 0)
-    {
-      return YELLOW_BACKGROUND;
-    }
-    else if (strcmp(nomeCor, "azul") == 0)
-    {
-      return BLUE_BACKGROUND;
-    }
-    else if (strcmp(nomeCor, "magenta") == 0)
-    {
-      return MAGENTA_BACKGROUND;
-    }
-    else if (strcmp(nomeCor, "ciano") == 0)
-    {
-      return CYAN_BACKGROUND;
-    }
-    else if (strcmp(nomeCor, "branco") == 0)
-    {
-      return WHITE_BACKGROUND;
-    }
-    else
-    {
-      return BLACK_BACKGROUND;
-    }
-  }
-  else
-  {
-    if (strcmp(nomeCor, "preto") == 0)
-    {
-      return BLACK;
-    }
-    else if (strcmp(nomeCor, "vermelho") == 0)
-    {
-      return RED;
-    }
-    else if (strcmp(nomeCor, "verde") == 0)
-    {
-      return GREEN;
-    }
-    else if (strcmp(nomeCor, "amarelo") == 0)
-    {
-      return YELLOW;
-    }
-    else if (strcmp(nomeCor, "azul") == 0)
-    {
-      return BLUE;
-    }
-    else if (strcmp(nomeCor, "magenta") == 0)
-    {
-      return MAGENTA;
-    }
-    else if (strcmp(nomeCor, "ciano") == 0)
-    {
-      return CYAN;
-    }
-    else if (strcmp(nomeCor, "branco") == 0)
-    {
-      return WHITE;
-    }
-    else
-    {
-      return WHITE;
-    }
+  if (fundoTexto == fundo) {
+    return strcmp(nomeCor, "preto") == 0 ? BLACK_BACKGROUND :
+           strcmp(nomeCor, "vermelho") == 0 ? RED_BACKGROUND :
+           strcmp(nomeCor, "verde") == 0 ? GREEN_BACKGROUND :
+           strcmp(nomeCor, "amarelo") == 0 ? YELLOW_BACKGROUND :
+           strcmp(nomeCor, "azul") == 0 ? BLUE_BACKGROUND :
+           strcmp(nomeCor, "magenta") == 0 ? MAGENTA_BACKGROUND :
+           strcmp(nomeCor, "ciano") == 0 ? CYAN_BACKGROUND :
+           strcmp(nomeCor, "branco") == 0 ? WHITE_BACKGROUND :
+           BLACK_BACKGROUND; 
+  } else {
+    return strcmp(nomeCor, "preto") == 0 ? BLACK :
+           strcmp(nomeCor, "vermelho") == 0 ? RED :
+           strcmp(nomeCor, "verde") == 0 ? GREEN :
+           strcmp(nomeCor, "amarelo") == 0 ? YELLOW :
+           strcmp(nomeCor, "azul") == 0 ? BLUE :
+           strcmp(nomeCor, "magenta") == 0 ? MAGENTA :
+           strcmp(nomeCor, "ciano") == 0 ? CYAN :
+           strcmp(nomeCor, "branco") == 0 ? WHITE :
+           WHITE;
   }
 }
 
@@ -287,5 +223,60 @@ LimparMonitor (tipoPixel monitor [NUMERO_MAXIMO_LINHAS_MONITOR][NUMERO_MAXIMO_CO
 
   return ok;
 }
+
+tipoErros 
+DesenharReta(tipoPixel monitor[NUMERO_MAXIMO_LINHAS_MONITOR][NUMERO_MAXIMO_COLUNAS_MONITOR], unsigned numeroLinhas, unsigned numeroColunas, unsigned linhaA, unsigned colunaA, unsigned linhaB, unsigned colunaB, char *corFundo, char *corPixelApagado, char *corPixelAceso, char *corPixelDefeituoso)
+{
+  if (numeroLinhas > NUMERO_MAXIMO_LINHAS_MONITOR || numeroLinhas <= 0)
+    return erroNumeroLinhas;
+
+  if (numeroColunas > NUMERO_MAXIMO_COLUNAS_MONITOR || numeroColunas <= 0)
+    return erroNumeroColunas;
+
+  if (linhaA >= numeroLinhas || linhaB >= numeroLinhas)
+    return linhaUltrapassaLimites;
+
+  if (colunaA >= numeroColunas || colunaB >= numeroColunas)
+    return colunaUltrapassaLimites;
+
+  int deltaX = abs(colunaB - colunaA), direcaoX = colunaA < colunaB ? 1 : -1;
+  int deltaY = -abs(linhaB - linhaA), direcaoY = linhaA < linhaB ? 1 : -1; 
+  int err = deltaX + deltaY, errDobro;
+    
+  while (1) 
+  {
+    if (linhaA >= 0 && linhaA < numeroLinhas && colunaA >= 0 && colunaA < numeroColunas) 
+    {
+      if (monitor[linhaA][colunaA] == defeituoso)
+        return erroPixelDefeituosoNoCaminho;
+      else
+        monitor[linhaA][colunaA] = aceso;
+    }
+
+    if (linhaA == linhaB && colunaA == colunaB) 
+      break;
+
+    errDobro = 2 * err;
+
+    if (errDobro >= deltaY) 
+    {
+      if (colunaA == colunaB) break;
+        err += deltaY;
+        colunaA += direcaoX;
+    }
+
+    if (errDobro <= deltaX) 
+    {
+      if (linhaA == linhaB) 
+        break;
+      err += deltaX;
+      linhaA += direcaoY;
+    }
+  }
+
+  return ok;
+}
+
+
 
 /* $RCSfile$ */
