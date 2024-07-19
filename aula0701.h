@@ -74,6 +74,19 @@ DesenharReta (tipoPixel monitor [NUMERO_MAXIMO_LINHAS_MONITOR ][NUMERO_MAXIMO_CO
               char *corPixelAceso, /* E */
               char *corPixelDefeituoso /* E */);
 
+tipoErros
+DesenharPoligono (tipoPixel monitor [NUMERO_MAXIMO_LINHAS_MONITOR][NUMERO_MAXIMO_COLUNAS_MONITOR], /* E/S */
+                  unsigned numeroLinhas, /* E */
+                  unsigned numeroColunas, /* E */
+                  unsigned numeroVertices, /* E */
+                  unsigned linhasVertices [NUMERO_MAXIMO_VERTICES], /* E */
+                  unsigned colunasVertices [NUMERO_MAXIMO_VERTICES], /* E */
+                  char *corFundo, /* E */
+                  char *corPixelApagado, /* E */
+                  char *corPixelAceso, /* E */
+                  char *corPixelDefeituoso /* E */);
+
+
 #endif
 
 /* $RCSfile$ */

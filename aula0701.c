@@ -277,6 +277,33 @@ DesenharReta(tipoPixel monitor[NUMERO_MAXIMO_LINHAS_MONITOR][NUMERO_MAXIMO_COLUN
   return ok;
 }
 
+tipoErros
+DesenharPoligono (tipoPixel monitor [NUMERO_MAXIMO_LINHAS_MONITOR][NUMERO_MAXIMO_COLUNAS_MONITOR], unsigned numeroLinhas, unsigned numeroColunas, unsigned numeroVertices, unsigned linhasVertices [NUMERO_MAXIMO_VERTICES], unsigned colunasVertices [NUMERO_MAXIMO_VERTICES], char *corFundo, char *corPixelApagado, char *corPixelAceso, char *corPixelDefeituoso)
+{
+  if (numeroLinhas > NUMERO_MAXIMO_LINHAS_MONITOR || numeroLinhas <= 0)
+    return erroNumeroLinhas;
 
+  if (numeroColunas > NUMERO_MAXIMO_COLUNAS_MONITOR || numeroColunas <= 0)
+    return erroNumeroColunas;
+
+  if (numeroVertices < 3 || numeroVertices > NUMERO_MAXIMO_VERTICES)
+    return erroNumeroVertices;
+
+  unsigned short indice;
+  tipoErros resultado;
+
+  for (indice = 0; indice < numeroVertices - 1; indice++)
+  {
+    resultado = DesenharReta(monitor, numeroLinhas, numeroColunas, linhasVertices[indice], colunasVertices[indice], linhasVertices[indice + 1], colunasVertices[indice + 1], corFundo, corPixelApagado, corPixelAceso, corPixelDefeituoso);
+    if (resultado != ok)
+      return resultado;
+  }
+
+  resultado = DesenharReta(monitor, numeroLinhas, numeroColunas, linhasVertices[numeroVertices - 1], colunasVertices[numeroVertices - 1], linhasVertices[0], colunasVertices[0], corFundo, corPixelApagado, corPixelAceso, corPixelDefeituoso);
+  if (resultado != ok)
+    return resultado;
+
+  return ok;
+}
 
 /* $RCSfile$ */
